@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>WebRTC Workshop</title>
+
+    <!-- Use Bootswatch CSS from cdn -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cerulean/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container">
+      <div class="row">
+        <div class="col">
+            <h1 class="text-center">
+                Share your screen
+                <br>
+            </h1>
+            <!-- The ID of your current session -->
+            <h4 class="text-center">
+              <span class="input-group-btn">
+                  <button id="share-screen" class="btn">Share</button>
+              </span>
+            </h4>
+          </div>
+          <div class="col">
+              <h1 class="text-center">
+                  Stream from your camera
+                  <br>
+              </h1>
+              <!-- The ID of your current session -->
+              <h4 class="text-center">
+                <span class="input-group-btn">
+                    <button id="start-camera" class="btn">Start Camera</button>
+                </span>
+              </h4>
+            </div>
+
+      </div>
+
+      <div class="row">
+              <!--
+                  Display video of the current user
+                  Note: mute your own video, otherwise you'll hear yourself ...
+               -->
+              <div class="text-center">
+                  <video id="media-stream"  width="1000" height="1200" autoplay="autoplay" muted="true" class="center-block"></video>
+                  <span class="label label-info">Your shared screen</span>
+              </div>
+      </div>
+
+
+    </div>
+    <script src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js"></script>
+    <script src="main.js"></script>
+</body>
+
+</html>

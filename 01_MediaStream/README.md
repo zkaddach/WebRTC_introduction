@@ -3,6 +3,7 @@
 Dans ce premier tutoriel nous allons voir comment récupérer les appareils disponibles à partir du navigateur de l'utilisateur, notamment :
 - Le flux vidéo issu de la caméra et/ou de l'écran de votre appareil.
 - Le flux audio issu du microphone.
+
 Note: Les flux audio et vidéos sont syncronisés par l'API.
 
 
@@ -32,7 +33,7 @@ navigator.mediaDevices.getUserMedia(options, callbackOnSucess, callbackOnError)
 
 ## MediaDevices.getDisplayMedia()
 Permet de récupérer le flux vidéo de l'écran et/ou le flux audio du microphone.
-Fonctionne de facon identique à la méthode *getUserMedia*. 
+Fonctionne de facon identique à la méthode *getUserMedia*.
 Voici le code :
 ```js
 function callbackOnSucess(stream){
@@ -51,6 +52,3 @@ var options = {
 
 navigator.mediaDevices.getDisplayMedia(options, callbackOnSucess, callbackOnError)
 ```
-<details>
-<summary>Note on the `.then()` function</summary>
-</details>

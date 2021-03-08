@@ -18,6 +18,6 @@ On retrouve ses APIs à travers trois objets qui sont respectivement MediaStream
 ## Agenda
 1. MediaStream pour accéder aux appareils de l'utilisateur.
 2. RTCPeerConnection pour la communication P2P entre navigateurs (en local).
-3. 2. RTCPeerConnection pour la communication P2P entre navigateurs (avec les websockets).
+3. RTCPeerConnection pour la communication P2P entre navigateurs (avec les websockets).
 4. RTCDataChannel pour transmettre n'importe quelles données.
-5. Réalisation d'une application web simple avec WebRTC. 
+5. Réalisation d'une application web simple avec WebRTC.

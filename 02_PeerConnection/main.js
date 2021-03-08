@@ -70,6 +70,43 @@ navigator.mediaDevices.getUserMedia(mediaOptions)
     .then(shareStream)
     .catch(handleError)
 
+/**
+ * Méthode permettant d'envoyer l'offre au pair distant.
+ */
+function sendOfferToRemotePc(offer) {
+  receivedOfferFromLocalPc(offer);
+}
+
+/**
+ * Méthode permettant de recevoir l'offre du pair distant.
+ */
+function receivedOfferFromLocalPc(offer) {
+  remotePc.setRemoteDescription(offer);
+  /**
+   * Suite à cela le pair distant doit creer une réponse et renvoyer également
+   * la description.
+   */
+  remotePc.createAnswer()
+      .then((desc) => {
+          remotePc.setLocalDescription(desc);
+          sendAnswerToLocalPc(desc);
+
+      })
+}
+
+/**
+ * Méthode permettant d'envoyer la réponse au pair distant.
+ */
+function sendAnswerToLocalPc(answer) {
+    receivedAnswerFromRemotePc(answer);
+}
+
+/**
+ * Méthode permettant de recevoir la réponse du pair distant.
+ */
+function receivedAnswerFromRemotePc(answer) {
+    localPc.setRemoteDescription(answer);
+}
 
 // Losqu'on souhaite effectuer la connexion entre nos deux objets RTCPeerConnection
 document.getElementById("call").onclick = function () {
@@ -87,17 +124,8 @@ document.getElementById("call").onclick = function () {
         .then((desc) => {
             console.log(desc);
             localPc.setLocalDescription(desc);
-            remotePc.setRemoteDescription(desc);
+            sendOfferToRemotePc(desc);
 
-            /**
-             * Suite à cela le pair distant doit creer une réponse et renvoyer également
-             * la description.
-            */
-            remotePc.createAnswer()
-                .then((desc) => {
-                    remotePc.setLocalDescription(desc);
-                    localPc.setRemoteDescription(desc);
-                })
             })
         .catch(handleError)
 }

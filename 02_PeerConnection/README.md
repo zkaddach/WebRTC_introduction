@@ -36,7 +36,7 @@ WebRTC. On considère un pair appelant qui souhaite communiquer avec un pair app
 > La signalisation est le mécanisme par lequel les pairs envoient des messages de
 > contrôle à chacun dans le but d'établir le protocole de communication, le canal, etc.
 
-1. Pour ce faire, les pairs ont besoin d'un même *canal de signalisation*. Dans ce tutoriel nous
+1. Pour ce faire la première étape pour les pairs est de disposer d'un même *canal de signalisation*. Dans ce tutoriel nous
 utiliserons des méthodes fictives qui simuleront la communication des pairs à travers le
 canal de signalisation.
 
@@ -51,7 +51,7 @@ reste alors aux pairs de s'entendre sur les paramètres de la communication. Web
 le protocol ICE (Interactive Connectivity Establishment).
 > Ce protocole laisse les deux pairs chercher et établir une connexion avec l'autre même
 > s'ils utilisent tous les deux de la translation d'adresses (NAT).
-> Plus d'information ici [MDN Web Docs](https://developer.mozilla.org/fr/docs/Glossary/ICE). 
+> Plus d'information ici [MDN Web Docs](https://developer.mozilla.org/fr/docs/Glossary/ICE).
 
 ## 2. L'évenement onicecandidate
 

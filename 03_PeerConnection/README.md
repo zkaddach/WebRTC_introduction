@@ -1,4 +1,4 @@
-# Peer Connection
+# Peer Connection with WebSockets
 Dans ce second tutoriel nous allons voir comment établir la connexion entre deux pairs, afin de faire communiquer des navigateurs en P2P en temps-réel et ainsi pouvoir envoyer des flux vidéos et audios.
 
 Pour cela WebRTC met à notre dispostion l'objet *RTCPeerConnection* que nous allons apprendre à manipuler.

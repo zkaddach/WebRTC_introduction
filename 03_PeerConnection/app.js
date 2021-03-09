@@ -2,7 +2,6 @@ const express = require('express');
 const app = express();
 var fs     = require('fs');
 
-let  http = require('http').Server(app);
 var https  = require('https');
 
 // Public Self-Signed Certificates for HTTPS connection
@@ -12,18 +11,16 @@ var certificate = fs.readFileSync('./certificates/cert.pem', 'utf8');
 var credentials = {key: privateKey, cert: certificate};
 var httpsServer = https.createServer(credentials, app);
 
-const port = process.env.PORT || 3000;
 
-
-let io = require('socket.io')(http);
+let io = require('socket.io')(httpsServer);
 
 app.use(express.static('public'));
 
 var LANAccess = "0.0.0.0";
-httpsServer.listen(8443, LANAccess);
-http.listen(port, () => {
-  console.log("Listening on " + port);
-})
+httpsServer.listen(8443, LANAccess, () => {
+    console.log("Listening on " + LANAccess + ":" + 8443);
+});
+
 
 
 
@@ -35,6 +32,11 @@ io.on('connection', socket => {
   socket.on("offer", ({offer, to}) => {
     console.log("Server received offer : ", to)
     socket.to(to).emit("offer", {offer, from: socket.id})
+  })
+
+  socket.on("candidate", ({candidate, to}) => {
+    console.log("Server received candidate, transmitting to : ", to)
+    socket.to(to).emit("candidate", {candidate, from: socket.id})
   })
 
   socket.on("answer", ({answer, to}) => {

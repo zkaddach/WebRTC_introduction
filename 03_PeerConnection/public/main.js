@@ -1,11 +1,14 @@
 // Chargement de la librairie socket.io
 const socket = io();
 
+var localStream;
+
 function shareStream(stream) {
     var video = document.getElementById('localVideo');
     video.srcObject = stream;
     // Il faut ajouter le stream a l'object RTCPeerConnection
-    rtcPeer.addStream(stream);
+    rtcPeer.addTrack(stream.getTracks()[0], stream);
+    rtcPeer.addTrack(stream.getTracks()[1], stream);
 }
 
 function handleError(err){
@@ -21,21 +24,27 @@ var mediaOptions = {
 var servers = {
   'iceServer': [
     {'urls': 'stun:stun.services.mozilla.com'},
-    {'urls': 'stun:stun.l.google.com:19302'}
+    {'urls': 'stun:stun.l.google.com:19302'},
+    {'urls': 'stun:stun2.l.google.com:19302'}
   ]
 }
 
 // On crée les objets RTCPeerConnection qui vont communiquer entre eux.
 var rtcPeer = new RTCPeerConnection(servers);
 
+var userId;
 /**
  * Cette méthode permet d'ajouter le nouveau candidat ICE a notre instance
  * RTCPeerConnection avec la description qui décrit l'état de l'instance distante.
  */
 function onIceCandidate(pc, event){
     // On ajoute le candidat à l'objet RTCPeerConnection distant.
-    console.log("Ajout du candidat : ", event.candidate)
-    rtcPeer.addIceCandidate(event.candidate)
+    candidate = event.candidate
+    if (candidate) {
+        console.log("Envoie du candidat : ", candidate)
+        socket.emit("candidate", {candidate, to:userId})
+    }
+
 }
 
 /**
@@ -56,14 +65,14 @@ rtcPeer.onicecandidate = function (e) {
  * Cet evenement est envoye directement apres l'appel de RTCPeerConnection.setRemoteDescription
  * et n'attend pas le resultat de negotiation SDP.
  */
-rtcPeer.onaddstream = function (e){
+rtcPeer.ontrack = function (e){
   console.log("Adding remote video");
   remoteVideo = document.getElementById('remoteVideo');
-  remoteVideo.srcObject = e.stream;
+  remoteVideo.srcObject = e.streams[0];
 }
 
 // On récupère les flux video et audio local
-navigator.mediaDevices.getUserMedia(mediaOptions)
+localStream = navigator.mediaDevices.getUserMedia(mediaOptions)
     .then(shareStream)
     .catch(handleError)
 
@@ -112,7 +121,7 @@ function receivedAnswer(answer, fromUserId) {
 // Losqu'on souhaite effectuer la connexion entre nos deux objets RTCPeerConnection
 document.getElementById("call").onclick = function () {
 
-  var userId = document.getElementById("remoteId").value
+  userId = document.getElementById("remoteId").value
   console.log("The user ID is : " + userId)
   // On crée les options de l'offre a envoyer
     var offerOptions = {
@@ -141,6 +150,10 @@ socket.on("offer", ({offer, from}) => {
   receivedOffer(offer, from)
 })
 
+socket.on("candidate", ({candidate, from}) => {
+    rtcPeer.addIceCandidate(candidate)
+    console.log("Added received candidate")
+})
 socket.on("answer",  ({answer, from}) => {
-  receivedAnswer(answer, from)
+    receivedAnswer(answer, from)
 })

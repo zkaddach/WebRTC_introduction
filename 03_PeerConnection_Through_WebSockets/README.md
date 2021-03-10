@@ -3,6 +3,21 @@ Dans ce second tutoriel nous allons voir comment établir la connexion entre deu
 
 Pour cela WebRTC met à notre dispostion l'objet *RTCPeerConnection* que nous allons apprendre à manipuler.
 
+
+<details>
+<summary><h2> Prérequis : installation de nodeJS </h2></summary>
+Installation des librairies nodeJS avec *npm* suivantes :
+- express
+```sh
+npm install -S express
+```
+
+- socket.io
+```sh
+npm install -S socket.io
+```
+</details>
+
 ## 1. Créer une instance RTCPeerConnection
 Une instance RTCPeerConnection a besoin des serveurs STUN et TURN en paramètre. Nous verrons ce que sont ces serveurs ICE plus tard pour le moment on définit un objet null.
 

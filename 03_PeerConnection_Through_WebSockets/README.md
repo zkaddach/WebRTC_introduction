@@ -4,8 +4,8 @@ Dans ce second tutoriel nous allons voir comment établir la connexion entre deu
 Pour cela WebRTC met à notre dispostion l'objet *RTCPeerConnection* que nous allons apprendre à manipuler.
 
 
-<details>
 <summary><h2> Prérequis : installation de nodeJS </h2></summary>
+<details>
 Installation des librairies nodeJS avec *npm* suivantes :
 - express
 ```sh

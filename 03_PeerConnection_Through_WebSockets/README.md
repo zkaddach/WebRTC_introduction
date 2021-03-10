@@ -1,43 +1,71 @@
 # Peer Connection with WebSockets
-Dans ce second tutoriel nous allons voir comment établir la connexion entre deux pairs, afin de faire communiquer des navigateurs en P2P en temps-réel et ainsi pouvoir envoyer des flux vidéos et audios.
+Dans ce troisième tutoriel il s'agit, comme précédemment, d'établir la connexion entre deux pairs, afin de faire communiquer des navigateurs en P2P en temps-réel, mais cette fois-ci en reposant sur les WebSockets comme canal de signalisation et non plus sur des "méthodes fictives".
 
-Pour cela WebRTC met à notre dispostion l'objet *RTCPeerConnection* que nous allons apprendre à manipuler.
+Pour réaliser cela nous devons commencer par mettre en place un serveur NodeJS.
+
+Note importante : Nous devons mettre en place un serveur **HTTPS**. Car l'utilisation de WebRTC doit se faire dans un contexte sécurisé. Ainsi nous commencerons par montrer comment mettre en place un serveur HTTPS.
+> A savoir que la connexion *localhost* est considérée comme étant un contexte sécurisé.
 
 <details>
-<summary> Prérequis : installation de nodeJS </summary>
-Installation des librairies nodeJS avec *npm* suivantes :
+<summary> Prérequis : installation de NodeJS </summary>
+Installation des librairies NodeJS avec *npm* suivantes :
 
-- express
+**express**
 ```sh
 npm install -S express
 ```
 
-- socket.io
+**socket.io**
 ```sh
 npm install -S socket.io
 ```
 </details>
 
-## 1. Créer une instance RTCPeerConnection
-Une instance RTCPeerConnection a besoin des serveurs STUN et TURN en paramètre. Nous verrons ce que sont ces serveurs ICE plus tard pour le moment on définit un objet null.
-
-```js
-var servers = null;
-var rtcPeerObject = RTCPeerConnection(servers);
- ```
-
-Une fois notre objet RTCPeerConnection crée nous pouvons y attacher les flux que nous avons récupérer grace à
-getUserMedia().
-
-```js
-rtcPeerObject.addStream(stream)
+## 1. Serveur HTTPS avec NodeJS
+Nous utiliserons des clés "self-signed" (l'idéal étant d'avoir des clés signés par une autorité...).
+Il faut commencer par générer les clés publiques et privées, avec *openssl*.  
+Pour plus de détails sur les options sur [linuxize](https://linuxize.com/post/creating-a-self-signed-ssl-certificate/)
+```bash
+openssl req -newkey rsa:4096 \
+            -x509 \
+            -sha256 \
+            -days 3650 \
+            -nodes \
+            -out example.crt \
+            -keyout example.key
 ```
 
+Ensuite il suffit d'ouvrir la clé publique et le certificat avec la librairie *js* et on définit un objet credentials comme suit :
+```js
+var fs = require('fs');
 
-## 2. L'évenement onicecandidate
+// "Public Self-Signed Certificates" pour la connexion HTTPS
+var privateKey  = fs.readFileSync('./certificates/key.pem', 'utf8');
+var certificate = fs.readFileSync('./certificates/cert.pem', 'utf8');
+// Création de l'objet crédentials avec la clé et le certificat
+var credentials = {key: privateKey, cert: certificate};
+```
 
-## 3. L'ajout et la récupération des flux
+Finallement on peut utiliser notre clé et certificat SSL avec l'objet HTTPS.
+```js
+// On utilise la librairie express
+const express = require('express');
+const app = express();
+var https  = require('https');
 
-## 4. La création de l'offre
+// On crée l'objet https
+var httpsServer = https.createServer(credentials, app);
+```
 
-## 5. La création de la réponse  
+## 2. Les WebSockets avec socket.io
+
+#### 2-A. Côté serveur
+
+#### 2-B. Côté client
+
+
+## 3. ICE Servers
+
+#### 3-A STUN servers
+
+#### 3-B TURN servers

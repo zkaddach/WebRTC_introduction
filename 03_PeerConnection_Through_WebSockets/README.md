@@ -103,13 +103,95 @@ io.on('connection', socket => {
 })
 ```
 
-Remarque : On ajoutera un message qui affiche à l'utilisateur son propre socket ID afin que celui-ci puisse le communiquer à l'autre pair. Ce dernier pourra alors le contacter au traver de notre serveur de signalisation. 
+Remarque : On ajoutera un message qui affiche à l'utilisateur son propre socket ID afin que celui-ci puisse le communiquer à l'autre pair. Ce dernier pourra alors le contacter au traver de notre serveur de signalisation.
+
+Remarque 2 : On constatera que le serveur transmet toujours au pair qui reçoit un message, le socketID du pair qui envoie le message.
+Cela permet au pair appelé d'avoir l'ID du pair appelant afin de pouvoir communiquer avec lui au travers de notre serveur qui fait office de canal de signalisation.
 
 #### 2-B. Côté client
+Tout d'abord pour pouvoir utiliser socket.io il faut ajouter le script suivant dans le index.html :
+```html
+<!-- Ajouter pour pouvoir utiliser le framework socket.io -->
+<script src="/socket.io/socket.io.js"></script>
+```
+Ce qui va nous permettre d'importer dans notre fichier *main.js* la librairie socket.io `const socket = io();`
 
 
-## 3. ICE Servers
+Côté client on va donc retrouver les mêmes 3 événéments vu au-dessus.
+
+i. La première chose étant de définir l'ID du pair distant pour le pair appelant. Pour ce faire rien que de plus simple que demander à l'utilisateur de l'entrer dans un input.
+```js
+var userId;
+userId = document.getElementById("remoteId").value;
+```
+
+ii. Ensuite nous modifions nos fonctions qui ont besoin d'emettre des messages de contrôle à travers le serveur de signalisation.
+
+Reprenant nos fonctions `sendOfferToRemotePc(offer)` et `sendAnswerToLocalPc(answer)` qui deviennent:
+```js
+/**
+ * Méthode permettant d'envoyer la réponse au pair distant.
+ */
+function sendAnswer(answer, userId) {
+  console.log("Sending Answer to : ", userId)
+  socket.emit("answer", {answer, to: userId})
+}
+
+/**
+ * Méthode permettant d'envoyer l'offre au pair distant.
+ */
+function sendOffer(offer, userId) {
+  console.log("Sending Offer to : ", userId)
+  socket.emit("offer", {offer, to: userId})
+}
+```
+
+Sans oublier la function `onIceCandidate(event)` qui maintenant doit s'occuper d'envoyer le ICE candidat au pair distant.
+```js
+/**
+ * Cette méthode permet d'envoyer le ICE candidat de notre agent ICE de ce
+ * pair a l'agent ICE du pair distant.
+ */
+function onIceCandidate(pc, event){
+    // On envoie donc le candidat à l'objet RTCPeerConnection distant.
+    candidate = event.candidate
+    if (candidate) {
+        console.log("Envoie du candidat : ", candidate)
+        socket.emit("candidate", {candidate, to:userId})
+    }
+
+}
+```
+
+iii. Enfin occupons nous maintenant des fonctions permettant de gérer la réception des messages de contrôle.
+
+```js
+socket.on("offer", ({offer, from}) => {
+  receivedOffer(offer, from)
+})
+
+socket.on("candidate", ({candidate, from}) => {
+    // On ajoute le ICE candidat à la récéption de celui-ci
+    rtcPeer.addIceCandidate(candidate)
+    console.log("Added received candidate")
+})
+
+socket.on("answer",  ({answer, from}) => {
+    receivedAnswer(answer, from)
+})
+```
+
+Comme vous pouvez le voir, il n'y a rien de particulier puisque les méthodes `receivedOffer(offer)` et `receivedAnswer(answer)` ont déjà été défnit dans le chapitre précédant et n'ont pas besoin d'être modifié.
+
+
+## 3. ICE Serveurs
+Que ce sont les ICE serveurs ?
+Rappel : le protocol ICE permet d'établir une connexion entre deux pairs même si ceux-ci sont derrières des NAT (Network Address Translation).
+> @TODO explication de ce qu'est un NAT
+>
 
 #### 3-A STUN servers
+@TODO explication de ce qu'est un STUN, comment ca marche et pourquoi parfois ca ne marche pas
 
 #### 3-B TURN servers
+@TODO explication de ce qu'est un TURN, comment ca marche

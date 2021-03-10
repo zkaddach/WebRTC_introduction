@@ -39,7 +39,7 @@ WebRTC. On considère un pair appelant qui souhaite communiquer avec un pair app
 NOTE : On appelera remotePC et localPc pour représenter les instances respective du
 pair appelé et du pair appelant.
 
-### A. Pour ce faire la première étape pour les pairs est de disposer d'un même *canal de signalisation*. Dans ce tutoriel nous
+### 2-A. Pour ce faire la première étape pour les pairs est de disposer d'un même *canal de signalisation*. Dans ce tutoriel nous
 utiliserons des méthodes fictives qui simuleront la communication des pairs à travers le
 canal de signalisation.
 ```js
@@ -58,7 +58,7 @@ function sendAnswerToLocalPc(answer) {
 }
 ```
 
-### B. Une fois le canal de signalisation établi il faut que nos pairs puisse s'entendre sur le format des
+### 2-B. Une fois le canal de signalisation établi il faut que nos pairs puisse s'entendre sur le format des
 données qui seront envoyées. Pour cela le pair appelant créer une **offre** contenant la description
 de la session au format SDP (Session Description Protocol).
 > On crée l'offre avec la méthode *rtcPeerObject.createOffer(options)*.
@@ -85,7 +85,7 @@ localPc.createOffer(offerOptions)
     .catch(handleError)
 ```
 
-### C. Le pair appelé reçoit la description et renvoie une **réponse** au pair appelant.
+### 2-C. Le pair appelé reçoit la description et renvoie une **réponse** au pair appelant.
 > Lorsque le pair appelé reçoit l'offre du pair appelant il doit utiliser la description reçus et renvoyer
 > une réponse au pair distant.
 
@@ -122,7 +122,7 @@ function receivedAnswerFromRemotePc(answer) {
 }
 ```
 
-### D. Suite à cela les paramètres dit "d'encodages" des données sont définis il
+### 2-D. Suite à cela les paramètres dit "d'encodages" des données sont définis il
 reste alors aux pairs de s'entendre sur les paramètres de la communication. WebRTC utilise pour cela
 le protocol ICE (Interactive Connectivity Establishment).
 > Ce protocole laisse les deux pairs chercher et établir une connexion avec l'autre même

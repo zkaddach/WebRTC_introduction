@@ -1,8 +1,8 @@
 const express = require('express');
 const app = express();
-var fs     = require('fs');
+var fs = require('fs');
 
-var https  = require('https');
+var https = require('https');
 
 // Public Self-Signed Certificates for HTTPS connection
 var privateKey  = fs.readFileSync('./certificates/key.pem', 'utf8');

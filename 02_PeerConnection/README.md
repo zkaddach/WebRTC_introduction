@@ -36,7 +36,7 @@ WebRTC. On considère un pair appelant qui souhaite communiquer avec un pair app
 > La signalisation est le mécanisme par lequel les pairs envoient des messages de
 > contrôle à chacun dans le but d'établir le protocole de communication, le canal, etc.
 
-NOTE : On appelera remotePC et localPc pour représenter les instances respective du
+Note : On appelera remotePC et localPc pour représenter les instances respective du
 pair appelé et du pair appelant.
 
 ### 2-A. Pour ce faire la première étape pour les pairs est de disposer d'un même *canal de signalisation*. Dans ce tutoriel nous utiliserons des méthodes fictives qui simuleront la communication des pairs à travers le canal de signalisation.

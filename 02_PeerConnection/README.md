@@ -39,10 +39,48 @@ WebRTC. On considère un pair appelant qui souhaite communiquer avec un pair app
 1. Pour ce faire la première étape pour les pairs est de disposer d'un même *canal de signalisation*. Dans ce tutoriel nous
 utiliserons des méthodes fictives qui simuleront la communication des pairs à travers le
 canal de signalisation.
+```js
+/**
+ * Méthode fictive permettant d'envoyer l'offre au pair distant.
+ */
+function sendOfferToRemotePc(offer) {
+  receivedOfferFromLocalPc(offer);
+}
+
+/**
+ * Méthode fictive permettant d'envoyer la réponse au pair distant.
+ */
+function sendAnswerToLocalPc(answer) {
+    receivedAnswerFromRemotePc(answer);
+}
+```
 
 2. Une fois le canal de signalisation établi il faut que nos pairs puisse s'entendre sur le format des
 données qui seront envoyées. Pour cela le pair appelant créer une **offre** contenant la description
 de la session au format SDP (Session Description Protocol).
+> On crée l'offre avec la méthode *rtcPeerObject.createOffer(options)*.
+> Celle-ci renvoie une promesse qui prend en argument la description de la session.
+> Nous avons besoin de dire à notre pair d'utiliser cette description puis nous devons l'envoyer au pair
+> distant.
+
+```js
+/**
+ * La creation de l'offre necessite de definir au moins la "Description"
+ * de la session (encodage, compression, etc)
+ */
+ var offerOptions = {
+     offerToReceiveAudio: 1,
+     offerToReceiveVideo: 1
+ };
+localPc.createOffer(offerOptions)
+    .then((desc) => {
+        console.log("Description de la session lors de la création de l'offre : ", desc);
+        localPc.setLocalDescription(desc);
+        sendOfferToRemotePc(desc);
+
+        })
+    .catch(handleError)
+```
 
 3. Le pair appelé reçoit la description et renvoie une **réponse** au pair appelant.
 

@@ -58,8 +58,52 @@ var httpsServer = https.createServer(credentials, app);
 ```
 
 ## 2. Les WebSockets avec socket.io
+Pour utiliser socket.io il suffit de l'inclure et de créer une instance grâce à l'objet *httpsServer* crée juste avant.
+`js let io = require('socket.io')(httpsServer);`
 
-#### 2-A. Côté serveur
+#### 2-A. Côté serveur (app.js)
+Le serveur permet de transmettre les messages de contrôle entre nos deux pairs. Récapitulons ce que nous avons vu dans le chapitre précédent.
+D'abord nous avons besoin d'envoyer la **Description de la Session** en créant une offre depuis le pair appelant.
+Ensuite le pair appelé doit renvoyer une **Réponse contenant sa propre description**.
+Et enfin il faut que les pairs puissent s'échanger leur **ICE candidat**.
+
+Nous avons donc besoin de 3 événements que nous appelerons :
+- *offer*
+- *answer*
+- *candidate*
+
+Bien entendu le serveur a besoin d'identifier chacun des pairs avec un identifiant unique, nous utiliserons alors l'ID automatiquement définit par socket.io.
+
+Socket IO s'utilise de la facon suivant :
+Pour emettre à un socket spécifique : `js socket.to(socketID).emit("NomDeLEvenement", donnees)`
+Pour recevoir : `js socket.on("NomDeLEvenement", (donnees) => {/* traitement des donnees*/ })`
+
+Voici donc le code de notre serveur pour être utilisé comme canal de signalisation :
+```js
+// A chaque nouvelle connection on crée les événements appropriés.
+io.on('connection', socket => {
+  console.log("A user connected");
+  socket.emit("newUser", "Coucou user :  " + socket.id)
+
+  // Evenement pour l'offre du pair appelant
+  socket.on("offer", ({offer, to}) => {
+    console.log("Server received offer, transmitting to : ", to)
+    socket.to(to).emit("offer", {offer, from: socket.id})
+  })
+  // Evenement pour la transmission du candidat entre les pairs  
+  socket.on("candidate", ({candidate, to}) => {
+    console.log("Server received candidate, transmitting to : ", to)
+    socket.to(to).emit("candidate", {candidate, from: socket.id})
+  })
+  // Evenement pour la réponse du pair appelé
+  socket.on("answer", ({answer, to}) => {
+    console.log("Server received answer, transmitting to : ", to)
+    socket.to(to).emit("answer", {answer, from: socket.id})
+  })
+})
+```
+
+Remarque : On ajoutera un message qui affiche à l'utilisateur son propre socket ID afin que celui-ci puisse le communiquer à l'autre pair. Ce dernier pourra alors le contacter au traver de notre serveur de signalisation. 
 
 #### 2-B. Côté client
 

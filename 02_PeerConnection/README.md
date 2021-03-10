@@ -39,9 +39,7 @@ WebRTC. On considère un pair appelant qui souhaite communiquer avec un pair app
 NOTE : On appelera remotePC et localPc pour représenter les instances respective du
 pair appelé et du pair appelant.
 
-### 2-A. Pour ce faire la première étape pour les pairs est de disposer d'un même *canal de signalisation*. Dans ce tutoriel nous
-utiliserons des méthodes fictives qui simuleront la communication des pairs à travers le
-canal de signalisation.
+### 2-A. Pour ce faire la première étape pour les pairs est de disposer d'un même *canal de signalisation*. Dans ce tutoriel nous utiliserons des méthodes fictives qui simuleront la communication des pairs à travers le canal de signalisation.
 ```js
 /**
  * Méthode fictive permettant d'envoyer l'offre au pair distant.
@@ -58,9 +56,7 @@ function sendAnswerToLocalPc(answer) {
 }
 ```
 
-### 2-B. Une fois le canal de signalisation établi il faut que nos pairs puisse s'entendre sur le format des
-données qui seront envoyées. Pour cela le pair appelant créer une **offre** contenant la description
-de la session au format SDP (Session Description Protocol).
+### 2-B. Une fois le canal de signalisation établi il faut que nos pairs puisse s'entendre sur le format des données qui seront envoyées. Pour cela le pair appelant créer une **offre** contenant la description de la session au format SDP (Session Description Protocol).
 > On crée l'offre avec la méthode *rtcPeerObject.createOffer(options)*.
 > Celle-ci renvoie une promesse qui prend en argument la description de la session.
 > Nous avons besoin de dire à notre pair d'utiliser cette description puis nous devons l'envoyer au pair
@@ -122,9 +118,7 @@ function receivedAnswerFromRemotePc(answer) {
 }
 ```
 
-### 2-D. Suite à cela les paramètres dit "d'encodages" des données sont définis il
-reste alors aux pairs de s'entendre sur les paramètres de la communication. WebRTC utilise pour cela
-le protocol ICE (Interactive Connectivity Establishment).
+### 2-D. Suite à cela les paramètres dit "d'encodages" des données sont définis il reste alors aux pairs de s'entendre sur les paramètres de la communication. WebRTC utilise pour cela le protocol ICE (Interactive Connectivity Establishment).
 > Ce protocole laisse les deux pairs chercher et établir une connexion avec l'autre même
 > s'ils utilisent tous les deux de la translation d'adresses (NAT).
 > Plus d'information ici [MDN Web Docs](https://developer.mozilla.org/fr/docs/Glossary/ICE).

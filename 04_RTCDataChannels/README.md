@@ -1,5 +1,6 @@
 # RTC Data Channels
-WebRTC permet la communication de flux en temps-réel en P2P mais permet également de transmettre n'importe quelles données.
-Ce sera l'objet de ce chapitre, on apprendra à utiliser l'API **RTCDataChannel**.
+WebRTC permet donc la communication en temps-réel en P2P entre des navigateurs web. Jusque là nous avons vu comment envoyer des flux vidéos/audios, maintenant nous allons voir comment envoyer n'importe quelle données.
 
-## 1. 
+Pour faire cela, on apprendra à utiliser l'API **RTCDataChannel**.
+
+## 1.

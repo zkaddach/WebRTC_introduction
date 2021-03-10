@@ -1,18 +1,15 @@
-function shareStream(stream) {
-    var video = document.getElementById('localVideo');
-    video.srcObject = stream;
-    // Il faut ajouter le stream a l'object RTCPeerConnection
-    localPc.addStream(stream);
-}
+
+
+// On récupère les elements de la DOM
+messageInputBox = document.getElementById('message');
+receiveBox = document.getElementById('receivebox');
+sendBtn = document.getElementById('send');
+connectBtn = document.getElementById("connect");
 
 function handleError(err){
     console.log(err);
 }
 
-var mediaOptions = {
-    video: true,
-    audio: true
-}
 
 // L'objet RTCPeerConnection a besoin des ICE servers (nous expliquerons ca) par la suite.
 var servers = null;
@@ -21,6 +18,32 @@ var servers = null;
 var localPc = new RTCPeerConnection(servers);
 var remotePc = new RTCPeerConnection(servers);
 
+
+/** On crée un data channel pour pair local, chaque pair à sa propre
+  * DataChannel.
+  */
+sendChannel = localPc.createDataChannel('sendChannel');
+sendChannel.onopen = handleSendChannelStatusChange;
+sendChannel.onclose = handleSendChannelStatusChange;
+
+function handleSendChannelStatusChange(event) {
+    if (sendChannel) {
+      var state = sendChannel.readyState;
+
+      if (state === "open") {
+        messageInputBox.disabled = false;
+        messageInputBox.focus();
+        console.log("Channel opened");
+
+      } else {
+        messageInputBox.disabled = true;
+        console.log("Channel closed");
+      }
+    }
+}
+
+
+remotePc.ondatachannel = receiveChannelCallback;
 /**
  * Cette méthode permet d'ajouter le nouveau candidat ICE a notre instance
  * RTCPeerConnection avec la description qui décrit l'état de l'instance distante.
@@ -51,24 +74,39 @@ remotePc.onicecandidate = function (e) {
   onIceCandidate(remotePc, e);
 }
 
-/**
- * La propriete onaddstream permet de gerer l'evenenement addstream de type
- * MediaStreamEvent, qui est recu par l'objet RTCPeerConnection.
- * Un tel evenement a lieu lorque un MediaStream est ajouter a la connection par
- * le pair distant.
- * Cet evenement est envoye directement apres l'appel de RTCPeerConnection.setRemoteDescription
- * et n'attend pas le resultat de negotiation SDP.
- */
-remotePc.onaddstream = function (e){
-  console.log("Adding remote video");
-  remoteVideo = document.getElementById('remoteVideo');
-  remoteVideo.srcObject = e.stream;
+// ----------- METHODS MANAGING DATA CHANNEL
+
+function receiveChannelCallback(event) {
+    receiveChannel = event.channel;
+    receiveChannel.onmessage = handleReceiveMessage;
+    receiveChannel.onopen = handleReceiveChannelStatusChange;
+    receiveChannel.onclose = handleReceiveChannelStatusChange;
+  }
+
+function handleReceiveChannelStatusChange(event) {
+    if (receiveChannel) {
+      console.log("Receive channel's status has changed to " +
+                  receiveChannel.readyState);
+    }
 }
 
-// On récupère les flux video et audio local
-navigator.mediaDevices.getUserMedia(mediaOptions)
-    .then(shareStream)
-    .catch(handleError)
+function sendMessage() {
+    var message = messageInputBox.value;
+    sendChannel.send(message);
+
+    messageInputBox.value = "";
+    messageInputBox.focus();
+}
+
+function handleReceiveMessage(event) {
+  var el = document.createElement("p");
+  var txtNode = document.createTextNode(event.data);
+
+  el.appendChild(txtNode);
+  receiveBox.appendChild(el);
+}
+
+// ----------- METHODS MANAGING OFFER & ANSWER
 
 /**
  * Méthode permettant d'envoyer l'offre au pair distant.
@@ -109,18 +147,13 @@ function receivedAnswerFromRemotePc(answer) {
 }
 
 // Losqu'on souhaite effectuer la connexion entre nos deux objets RTCPeerConnection
-document.getElementById("call").onclick = function () {
+connectBtn.onclick = function () {
 
-  // On crée les options de l'offre a envoyer
-    var offerOptions = {
-        offerToReceiveAudio: 1,
-        offerToReceiveVideo: 1
-    };
     /**
      * La creation de l'offre necessite de definir au moins la "Description"
      * de la connexion (encodage, compression, algorithmes de cryptage, etc)
      */
-    localPc.createOffer(offerOptions)
+    localPc.createOffer()
         .then((desc) => {
             console.log(desc);
             localPc.setLocalDescription(desc);
@@ -128,4 +161,10 @@ document.getElementById("call").onclick = function () {
 
             })
         .catch(handleError)
+
+    sendBtn.disabled = false;
+}
+
+sendBtn.onclick = function () {
+  sendMessage();
 }

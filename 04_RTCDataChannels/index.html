@@ -14,31 +14,34 @@
       <div class="row">
           <div class="col">
               <h1 class="text-center">
-                  Call Friend
+                  Send message to friend
                   <br>
               </h1>
               <!-- The ID of your current session -->
               <h4 class="text-center">
+                <span class="input-group-btn" >
+                    <button id="send" class="btn" disabled>Send Messages</button>
+                </span>
                 <span class="input-group-btn">
-                    <button id="call" class="btn">Start Call</button>
+                    <button id="connect" class="btn">Start connection</button>
                 </span>
               </h4>
             </div>
       </div>
 
       <div class="row">
-              <!--
-                  Display video of the current user
-                  Note: mute your own video, otherwise you'll hear yourself ...
-               -->
-              <div class="col">
-                  <video id="remoteVideo"  width="200" height="200" autoplay="autoplay" muted="true"></video>
-                  <span class="label label-info">Friend's Video</span>
-              </div>
-              <div class="call">
-                  <video id="localVideo"  width="200" height="200" autoplay="autoplay" muted="true"></video>
-                  <span class="label label-info">Your Video</span>
-              </div>
+        <!--
+            Display video of the current user
+            Note: mute your own video, otherwise you'll hear yourself ...
+         -->
+         <label for="message">Enter a message:
+          <input type="text" name="message" id="message" placeholder="Message text"
+                  inputmode="latin" size=60 maxlength=120 >
+        </label>
+
+        <div class="messagebox" id="receivebox">
+          <p>Messages received:</p>
+        </div>
       </div>
 
 

@@ -3,6 +3,7 @@ function shareStream(stream) {
     video.srcObject = stream;
     // Il faut ajouter le stream a l'object RTCPeerConnection
     localPc.addStream(stream);
+    // @TODO mettre a jour de stream a track
 }
 
 function handleError(err){

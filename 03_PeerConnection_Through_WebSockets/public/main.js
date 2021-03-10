@@ -1,8 +1,6 @@
 // Chargement de la librairie socket.io
 const socket = io();
 
-var localStream;
-
 function shareStream(stream) {
     var video = document.getElementById('localVideo');
     video.srcObject = stream;
@@ -15,10 +13,7 @@ function handleError(err){
     console.log(err);
 }
 
-var mediaOptions = {
-    video: true,
-    audio: true
-}
+
 
 // L'objet RTCPeerConnection a besoin des ICE servers (nous expliquerons ca) par la suite.
 var servers = {
@@ -71,8 +66,12 @@ rtcPeer.ontrack = function (e){
   remoteVideo.srcObject = e.streams[0];
 }
 
+var mediaOptions = {
+    video: true,
+    audio: true
+}
 // On récupère les flux video et audio local
-localStream = navigator.mediaDevices.getUserMedia(mediaOptions)
+navigator.mediaDevices.getUserMedia(mediaOptions)
     .then(shareStream)
     .catch(handleError)
 

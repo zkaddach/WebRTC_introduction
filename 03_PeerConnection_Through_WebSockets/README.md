@@ -59,7 +59,7 @@ var httpsServer = https.createServer(credentials, app);
 
 ## 2. Les WebSockets avec socket.io
 Pour utiliser socket.io il suffit de l'inclure et de créer une instance grâce à l'objet *httpsServer* crée juste avant.
-`js let io = require('socket.io')(httpsServer);`
+`let io = require('socket.io')(httpsServer);`
 
 #### 2-A. Côté serveur (app.js)
 Le serveur permet de transmettre les messages de contrôle entre nos deux pairs. Récapitulons ce que nous avons vu dans le chapitre précédent.
@@ -75,8 +75,8 @@ Nous avons donc besoin de 3 événements que nous appelerons :
 Bien entendu le serveur a besoin d'identifier chacun des pairs avec un identifiant unique, nous utiliserons alors l'ID automatiquement définit par socket.io.
 
 Socket IO s'utilise de la facon suivant :
-Pour emettre à un socket spécifique : `js socket.to(socketID).emit("NomDeLEvenement", donnees)`
-Pour recevoir : `js socket.on("NomDeLEvenement", (donnees) => {/* traitement des donnees*/ })`
+Pour emettre à un socket spécifique : `socket.to(socketID).emit("NomDeLEvenement", donnees)`
+Pour recevoir : `socket.on("NomDeLEvenement", (donnees) => {/* traitement des donnees*/ })`
 
 Voici donc le code de notre serveur pour être utilisé comme canal de signalisation :
 ```js

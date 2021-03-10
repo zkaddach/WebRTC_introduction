@@ -132,3 +132,7 @@ dmypy.json
 03_PeerConnection_Through_WebSockets/node_modules/
 03_PeerConnection_Through_WebSockets/package.json
 03_PeerConnection_Through_WebSockets/package-lock.json
+
+05_CoCode/node_modules/
+05_CoCode/package.json
+05_CoCode/package-lock.json

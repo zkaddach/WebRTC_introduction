@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>WebRTC Workshop - RTCPeerConnection</title>
+
+    <!-- Use Bootswatch CSS from cdn -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cerulean/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container">
+      <div class="row">
+          <div class="col">
+              <h1 class="text-center">
+                  Call Friend
+                  <br>
+              </h1>
+              <!-- The ID of your current session -->
+              <h4 class="text-center">
+                <input type="text" name="remoteId" id="remoteId" />
+                <span class="input-group-btn">
+                    <button id="call" class="btn">Start Call</button>
+                </span>
+              </h4>
+            </div>
+      </div>
+
+      <div class="row">
+              <!--
+                  Display video of the current user
+                  Note: mute your own video, otherwise you'll hear yourself ...
+               -->
+              <div class="col">
+                  <video id="remoteVideo"  width="200" height="200" autoplay="autoplay" muted="true"></video>
+                  <span class="label label-info">Friend's Video</span>
+              </div>
+              <div class="call">
+                  <video id="localVideo"  width="200" height="200" autoplay="autoplay" muted="true"></video>
+                  <span class="label label-info">Your Video</span>
+              </div>
+      </div>
+
+
+    </div>
+    <!-- Ajouter pour pouvoir utiliser le framework socket.io -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="main.js"></script>
+</body>
+
+</html>

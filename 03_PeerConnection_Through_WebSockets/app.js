@@ -23,8 +23,6 @@ httpsServer.listen(8443, LANAccess, () => {
 
 
 
-
-
 io.on('connection', socket => {
   console.log("A user connected");
   socket.emit("newUser", "Coucou user :  " + socket.id)
@@ -43,38 +41,4 @@ io.on('connection', socket => {
     console.log("Server received answer : ", to)
     socket.to(to).emit("answer", {answer, from: socket.id})
   })
-  // socket.on('create or join', (room) => {
-  //   console.log('Create or join the room ', room);
-  //   const myRoom = io.sockets.adapter.rooms[room] || {length: 0};
-  //   const numClients = myRoom.length;
-  //   console.log(room, " has ", numClients, " clients");
-  //
-  //   if (numClients == 0) {
-  //     socket.join(room);
-  //     socket.emit('created', room);
-  //   }
-  //   else if (numClients == 1) {
-  //     socket.join(room);
-  //     socket.emit('joined', room);
-  //   }
-  //   else {
-  //     socket.emit('full', room);
-  //   }
-  // })
-  //
-  // socket.on('ready', room => {
-  //   socket.broadcast.to(room).emit('ready');
-  // })
-  //
-  // socket.on('candidate', event => {
-  //   socket.broadcast.to(room).emit('ready');
-  // })
-  //
-  // socket.on('offer', event => {
-  //   socket.broadcast.to(event.room).emit('offer', event.sdp);
-  // })
-  //
-  // socket.on('answer', event => {
-  //   socket.broadcast.to(room).emit('answer', event.sdp);
-  // })
 })

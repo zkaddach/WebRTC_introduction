@@ -119,13 +119,13 @@ Ce qui va nous permettre d'importer dans notre fichier *main.js* la librairie so
 
 Côté client on va donc retrouver les mêmes 3 événéments vu au-dessus.
 
-i. La première chose étant de définir l'ID du pair distant pour le pair appelant. Pour ce faire rien que de plus simple que demander à l'utilisateur de l'entrer dans un input.
+###### i. La première chose étant de définir l'ID du pair distant pour le pair appelant. Pour ce faire rien que de plus simple que demander à l'utilisateur de l'entrer dans un input.
 ```js
 var userId;
 userId = document.getElementById("remoteId").value;
 ```
 
-ii. Ensuite nous modifions nos fonctions qui ont besoin d'emettre des messages de contrôle à travers le serveur de signalisation.
+###### ii. Ensuite nous modifions nos fonctions qui ont besoin d'emettre des messages de contrôle à travers le serveur de signalisation.
 
 Reprenant nos fonctions `sendOfferToRemotePc(offer)` et `sendAnswerToLocalPc(answer)` qui deviennent:
 ```js
@@ -163,7 +163,7 @@ function onIceCandidate(pc, event){
 }
 ```
 
-iii. Enfin occupons nous maintenant des fonctions permettant de gérer la réception des messages de contrôle.
+###### iii. Enfin occupons nous maintenant des fonctions permettant de gérer la réception des messages de contrôle.
 
 ```js
 socket.on("offer", ({offer, from}) => {

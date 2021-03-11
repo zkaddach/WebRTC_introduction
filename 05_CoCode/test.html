@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>CodeMirror Test</title>
+
+    <!-- Use Bootswatch CSS from cdn -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cerulean/bootstrap.min.css">
+
+    <!-- Inclusion de codemirror -->
+    <script src="node_modules/codemirror/lib/codemirror.js"></script>
+    <link rel="stylesheet" href="node_modules/codemirror/lib/codemirror.css">
+    <link rel="stylesheet" href="node_modules/codemirror/theme/ambiance.css">
+    <script src="node_modules/codemirror/mode/python/python.js"></script>
+    <script src="node_modules/codemirror/addon/edit/matchbrackets.js"></script>
+</head>
+
+
+
+<body>
+
+    <h1> Test de CodeMirror </h1>
+    <textarea id="localCode"> </textarea>
+</body>
+<script>
+    var myCodeMirror = CodeMirror.fromTextArea(document.getElementById('localCode'), {
+        lineNumbers: true,
+        matchBrackets: true,
+        theme: "ambiance",
+        readOnly: true
+    });
+
+    // var file = fopen("pytest.py", 0);
+    // if(file != -1) // If the file has been successfully opened
+    // {
+    //     str = fread(fh, length);     // Read in the entire file
+    //     myCodeMirror.setValue(str);
+    //     fclose(fh);                    // Close the file
+    //
+    // }
+
+    myCodeMirror.setValue("def hello():\n\tprint('Hello')\n\nhello()");
+</script>
+</html>

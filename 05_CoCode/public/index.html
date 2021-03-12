@@ -1,52 +1,73 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
     <title>WebRTC Workshop - RTCPeerConnection</title>
 
-    <!-- Use Bootswatch CSS from cdn -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/cerulean/bootstrap.min.css">
+    <!-- Use Bootstrap CSS from cdn -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+
+    <!-- Inclusion de codemirror -->
+    <script src="codemirror/lib/codemirror.js"></script>
+    <link rel="stylesheet" href="codemirror/lib/codemirror.css">
+    <link rel="stylesheet" href="codemirror/theme/ambiance.css">
+    <script src="codemirror/mode/python/python.js"></script>
+    <script src="codemirror/mode/javascript/javascript.js"></script>
+    <script src="codemirror/addon/edit/matchbrackets.js"></script>
+
 </head>
 
 <body>
-    <div class="container">
-      <div class="row">
-          <div class="col">
-              <h1 class="text-center">
-                  Call Friend
-                  <br>
-              </h1>
-              <!-- The ID of your current session -->
-              <h4 class="text-center">
-                <input type="text" name="remoteId" id="remoteId" />
-                <span class="input-group-btn">
-                    <button id="call" class="btn">Start Call</button>
-                </span>
-              </h4>
-            </div>
-      </div>
+  <h1> Test de CodeMirror </h1>
 
-      <div class="row">
-              <!--
-                  Display video of the current user
-                  Note: mute your own video, otherwise you'll hear yourself ...
-               -->
-              <div class="col">
-                  <video id="remoteVideo"  width="200" height="200" autoplay="autoplay" muted="true"></video>
-                  <span class="label label-info">Friend's Video</span>
-              </div>
-              <div class="call">
-                  <video id="localVideo"  width="200" height="200" autoplay="autoplay" muted="true"></video>
-                  <span class="label label-info">Your Video</span>
-              </div>
+  <div class="container">
+    <div class="row">
+      <label for="file-input"> Veuillez séléctionner un fichier : </label>
+      <input type="file" id="file-input" name="file-input"/>
+    </div>
+    <div class="row align-items-start">
+      <div class="col">
+        <textarea id="localCode"> </textarea>
       </div>
-
+      <div class="col">
+        <textarea id="remoteCode"> </textarea>
+      </div>
 
     </div>
+
+    <div class="row">
+        <div class="col">
+            <h1 class="text-center">
+                Call Friend
+                <br>
+            </h1>
+            <h4 class="text-center">
+              <input type="text" name="remoteId" id="remoteId" />
+              <span class="input-group-btn">
+                  <button id="call" class="btn">Start Call</button>
+              </span>
+            </h4>
+          </div>
+    </div>
+
+    <div class="row">
+      <video id="remoteVideo"  width="200" height="200" autoplay="autoplay" muted="true"></video>
+      <span class="label label-info">Friend's Video</span>
+    </div>
+    <div class="row">
+        <video id="localVideo"  width="200" height="200" autoplay="autoplay" muted="true"></video>
+        <span class="label label-info">Your Video</span>
+    </div>
+
+
+  </div>
+
     <!-- Ajouter pour pouvoir utiliser le framework socket.io -->
     <script src="/socket.io/socket.io.js"></script>
     <script src="main.js"></script>
+    <script src="code_editor.js"></script>
+
 </body>
 
 </html>

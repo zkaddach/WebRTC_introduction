@@ -6,7 +6,7 @@ Notre objectif est d'implémenter les fonctionnalités suivantes :
 ## Version 1 :
 - Réalisation d'un **appel vidéo**
 - Disposer d'une option permettant de choisir entre:
-  + **partage d'écran**
+  + **Partage d'écran**
   + **Cocoding** : zone d'écriture de code avec coloration syntaxique
 - Nombre d'utilisateurs limiter à **deux** utilisateurs
 - Permettre aux utilisateurs d'ouvrir un fichier dans l'option Cocoding

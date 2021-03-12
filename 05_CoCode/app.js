@@ -24,7 +24,7 @@ httpsServer.listen(8443, LANAccess, () => {
 
 io.on('connection', socket => {
   console.log("A user connected");
-  socket.emit("newUser", "Coucou user :  " + socket.id)
+  socket.emit("welcome", socket.id)
 
   socket.on("offer", ({offer, to}) => {
     console.log("Server received offer : ", to)

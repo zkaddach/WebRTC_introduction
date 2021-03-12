@@ -89,8 +89,6 @@ function handleSendChannelStatusChange(event) {
       var state = sendChannel.readyState;
 
       if (state === "open") {
-        messageInputBox.disabled = false;
-        messageInputBox.focus();
         console.log("Channel opened");
 
       } else {

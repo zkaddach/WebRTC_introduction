@@ -33,6 +33,35 @@ var servers = {
 var rtcPeer = new RTCPeerConnection(servers);
 
 var userId;
+
+/** On crée un data channel pour le pair local.
+ * Puis on définit les méthodes permettant de gérer les evenements
+ * 'onopen' et 'onclose'. Ces evenements ont lieu lorsque le canal pour
+ * transmettre les donnnees est etabli/ferme.
+ */
+sendChannel = rtcPeer.createDataChannel('sendChannel');
+sendChannel.onopen = handleSendChannelStatusChange;
+sendChannel.onclose = handleSendChannelStatusChange;
+
+/**
+ * Methode permettant de gerer les evenements d'ouverture et fermeture du
+ * canal de transmission des donnees.
+ * On desactive le bouton connexion sur le canal est ouvert.
+ */
+function handleSendChannelStatusChange(event) {
+    if (sendChannel) {
+      var state = sendChannel.readyState;
+
+      if (state === "open") {
+        console.log("Channel opened");
+
+      } else {
+        messageInputBox.disabled = true;
+        console.log("Channel closed");
+      }
+    }
+}
+
 /**
  * Cette méthode permet d'ajouter le nouveau candidat ICE a notre instance
  * RTCPeerConnection avec la description qui décrit l'état de l'instance distante.
@@ -70,6 +99,49 @@ rtcPeer.ontrack = function (e){
   remoteVideo = document.getElementById('remoteVideo');
   remoteVideo.srcObject = e.streams[0];
 }
+
+/**
+ * La propriété 'ondatachannel' permet de gérer l'événement 'datachanne' qui a lieu
+ * lorsque un RTCDataChannel est ajouté par le pair distant avec la méthode
+ * createDataChannel().
+ */
+rtcPeer.ondatachannel = function (event) {
+  rChannel = event.channel;
+  rChannel.onmessage = handleReceiveMessage;
+  rChannel.onopen = handleReceiveChannelStatusChange;
+  rChannel.onclose = handleReceiveChannelStatusChange;
+}
+
+/**
+ * Methode permettant d'ajouter le message recu depuis le canal de transmission.
+ */
+function handleReceiveMessage(event) {
+  remoteCodeMirror.setValue(event.data);
+}
+
+/**
+* Methode permettant de gerer les evenements d'ouverture et fermeture du
+* canal de transmission des donnees, lorsque celui ci est créer par le pair
+* distant.
+*/
+function handleReceiveChannelStatusChange(event) {
+  if (receiveChannel) {
+    console.log("Receive channel's status has changed to " +
+                receiveChannel.readyState);
+  }
+}
+
+
+/**
+ * Methode permettant d'envoyer un message a travers le canal de transmission.
+ */
+function sendMessage() {
+    var message = myCodeMirror.getValue();
+    sendChannel.send(message);
+
+}
+
+
 
 // On récupère les flux video et audio local
 localStream = navigator.mediaDevices.getUserMedia(mediaOptions)
@@ -118,6 +190,12 @@ function receivedAnswer(answer, fromUserId) {
     console.log("Received answer from : ", fromUserId)
 }
 
+
+myCodeMirror.on('change', function () {
+  sendMessage();
+});
+
+
 // Losqu'on souhaite effectuer la connexion entre nos deux objets RTCPeerConnection
 document.getElementById("call").onclick = function () {
 
@@ -142,8 +220,9 @@ document.getElementById("call").onclick = function () {
         .catch(handleError)
 }
 
-socket.on("newUser", (data) => {
-  console.log(data)
+socket.on("welcome", (data) => {
+  console.log(data);
+  document.getElementById('myId').innerHTML = data;
 })
 
 socket.on("offer", ({offer, from}) => {

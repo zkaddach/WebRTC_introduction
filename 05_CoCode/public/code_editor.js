@@ -13,6 +13,7 @@ var remoteCodeMirror = CodeMirror.fromTextArea(document.getElementById('remoteCo
     readOnly: true
 });
 
+// Using FileReader to open local file
 function readSingleFile(event) {
   var file = event.target.files[0];
   if (!file) {return;}
@@ -24,6 +25,9 @@ function readSingleFile(event) {
   reader.readAsText(file);
 }
 
+/**
+ * Methode permettant d'ecrir le fichier ouvert dans l'editeur CodeMirror
+ */
 function displayContent(content) {
   myCodeMirror.setValue(content);
 }

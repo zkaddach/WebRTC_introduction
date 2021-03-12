@@ -195,6 +195,10 @@ myCodeMirror.on('change', function () {
   sendMessage();
 });
 
+document.getElementById("copyId").onclick = function () {
+  navigator.clipboard.writeText(document.getElementById("myId").innerText);
+  document.execCommand("copy");
+}
 
 // Losqu'on souhaite effectuer la connexion entre nos deux objets RTCPeerConnection
 document.getElementById("call").onclick = function () {
@@ -222,7 +226,7 @@ document.getElementById("call").onclick = function () {
 
 socket.on("welcome", (data) => {
   console.log(data);
-  document.getElementById('myId').innerHTML = data;
+  document.getElementById('myId').innerText = data;
 })
 
 socket.on("offer", ({offer, from}) => {

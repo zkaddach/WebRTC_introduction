@@ -193,9 +193,14 @@ Rappel : le protocol ICE permet d'établir une connexion entre deux pairs même 
 
 #### 3-A STUN servers
 Un STUN serveur, va permettre à un pair de connaître l'addresse publique qui lui est associé.
+
 Voici une image reprise de [Mozilla Web Docs](https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Protocols)
+
 ![STUN serveur](webrtc-stun.png)
+
 #### 3-B TURN servers
 Il existe plusieurs raisons pour lesquelles la connexion direct entre deux pairs peut échouer et ce malgrès l'utilisation de serveur STUN. C'est à ce moment la qu'intervient le TURN serveurs qui va servir de relay pour transmettre les données entre les pairs.
+
 Voici une image reprise de [Mozilla Web Docs](https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Protocols)
+
 ![STUN serveur](webrtc-turn.png)

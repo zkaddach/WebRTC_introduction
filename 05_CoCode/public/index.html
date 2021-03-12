@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>WebRTC Workshop - RTCPeerConnection</title>
+    <title>CoCoddity</title>
 
     <!-- Use Bootstrap CSS from cdn -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
@@ -19,53 +19,58 @@
 </head>
 
 <body>
-  <h1> Test de CodeMirror </h1>
-
   <div class="container">
-    <div class="row">
-      <label for="file-input"> Veuillez séléctionner un fichier : </label>
-      <input type="file" id="file-input" name="file-input"/>
+    <div class="form-group row">
+      <div class="text-center">
+          <p> Partager votre ID pour être connecté à votre collègue :
+            <em id="myId"> </em>
+          </p>
+          <div class="col-xs-4">
+            <input type="text" class="form-control mb-3" id="remoteId" name="remoteId"
+                   placeholder="Ou entrez l'ID de votre collègue">
+          </div>
+          <div class="mb-3">
+              <button id="call" class="btn btn-primary">Appeler</button>
+          </div>
+        </div>
     </div>
-    <div class="row align-items-start">
+
+    <div class="col">
+      <div class="mb-3">
+        <label for="file-input" class="form-label"> Séléctionner un fichier</label>
+        <input class="form-control" type="file" name="file-input" id="file-input">
+      </div>
+    </div>
+
+
+
+
+
+    <div class="row align-items-start mb-3">
       <div class="col">
-        <textarea id="localCode"> </textarea>
+        <h3> Mon Code </h3>
+        <textarea id="localCode" value="Ecrivez votre code ici..."> </textarea>
       </div>
       <div class="col">
-        <span class="input-group-btn">
-            <button id="sendCode" class="btn">Send Code</button>
-        </span>
+        <h3> Movai Code du collègue </h3>
         <textarea id="remoteCode"> </textarea>
       </div>
-
     </div>
 
-    <div class="row">
-        <div class="col">
-            <h1 class="text-center">
-                Call Friend
-                <br>
-            </h1>
-            <p> Votre ID : </p>
-            <p id="myId"> </p>
-            <h4 class="text-center">
-              <input type="text" name="remoteId" id="remoteId" />
-              <span class="input-group-btn">
-                  <button id="call" class="btn">Start Call</button>
-              </span>
-            </h4>
-          </div>
+    <div class="row align-items-start mb-3">
+      <div class="col">
+        <div>
+          <video id="remoteVideo" width="200" height="150" autoplay="autoplay" ></video>
+        </div>
+        <p class="badge bg-secondary">Collègue</p>
+      </div>
+      <div class="col">
+        <div>
+          <video id="localVideo"  width="200" height="150" autoplay="autoplay" muted="true"></video>
+        </div>
+        <p class="badge bg-secondary">Votre Video</p>
+      </div>
     </div>
-
-    <div class="row">
-      <video id="remoteVideo"  width="200" height="200" autoplay="autoplay" muted="true"></video>
-      <span class="label label-info">Friend's Video</span>
-    </div>
-    <div class="row">
-        <video id="localVideo"  width="200" height="200" autoplay="autoplay" muted="true"></video>
-        <span class="label label-info">Your Video</span>
-    </div>
-
-
   </div>
 
     <!-- Ajouter pour pouvoir utiliser le framework socket.io -->

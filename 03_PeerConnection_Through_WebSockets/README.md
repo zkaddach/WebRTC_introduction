@@ -146,7 +146,7 @@ function sendOffer(offer, userId) {
 }
 ```
 
-Sans oublier la function `onIceCandidate(event)` qui maintenant doit s'occuper d'envoyer le ICE candidat au pair distant.
+Sans oublier la fonction `onIceCandidate(event)` qui maintenant doit s'occuper d'envoyer le ICE candidat au pair distant.
 ```js
 /**
  * Cette méthode permet d'envoyer le ICE candidat de notre agent ICE de ce
@@ -187,11 +187,15 @@ Comme vous pouvez le voir, il n'y a rien de particulier puisque les méthodes `r
 ## 3. ICE Serveurs
 Que ce sont les ICE serveurs ?
 Rappel : le protocol ICE permet d'établir une connexion entre deux pairs même si ceux-ci sont derrières des NAT (Network Address Translation).
-> @TODO explication de ce qu'est un NAT
->
+> Un routeur fait du NAT afin de faire correspondre une addresse IP dîte publique (car accessible depuis l'exterieur d'un réseau privé) à toutes les addresses d'un réseau privé.
+> Problème pour WebRTC : La connexion entre les navigateurs s'effectuant en P2P, les deux navigateurs ont besoin de connaître leurs addresses respectives. Or derrière un NAT cela n'est pas possible puisque les addresses IP du réseau sont privées (pas visible depuis l'exterieur du réseau).
+> [Source : Wikipedia]
 
 #### 3-A STUN servers
-@TODO explication de ce qu'est un STUN, comment ca marche et pourquoi parfois ca ne marche pas
-
+Un STUN serveur, va permettre à un pair de connaître l'addresse publique qui lui est associé.
+Voici une image reprise de [Mozilla Web Docs](https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Protocols)
+![STUN serveur](webrtc-stun.png)
 #### 3-B TURN servers
-@TODO explication de ce qu'est un TURN, comment ca marche
+Il existe plusieurs raisons pour lesquelles la connexion direct entre deux pairs peut échouer et ce malgrès l'utilisation de serveur STUN. C'est à ce moment la qu'intervient le TURN serveurs qui va servir de relay pour transmettre les données entre les pairs.
+Voici une image reprise de [Mozilla Web Docs](https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Protocols)
+![STUN serveur](webrtc-turn.png)

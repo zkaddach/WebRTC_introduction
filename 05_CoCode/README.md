@@ -11,3 +11,10 @@ Notre objectif est d'implémenter les fonctionnalités suivantes :
 - Nombre d'utilisateurs limiter à **deux** utilisateurs
 - Permettre aux utilisateurs d'ouvrir un fichier dans l'option Cocoding
 - Permettre aux utilisateurs de télécharger le code
+
+
+### Dépendances :
+- express
+- socket.io
+- codemirror
+- bootstrap

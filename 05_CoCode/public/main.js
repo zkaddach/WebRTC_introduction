@@ -2,7 +2,11 @@
 const socket = io();
 
 var localStream;
+var userId;
 
+/**
+ * Fonction pour partager le flux video de sa camera
+ */
 function shareStream(stream) {
     var video = document.getElementById('localVideo');
     video.srcObject = stream;
@@ -11,16 +15,17 @@ function shareStream(stream) {
     rtcPeer.addTrack(stream.getTracks()[1], stream);
 }
 
+
+/**
+ * Fonction pour afficher les erreurs des promesses
+ */
 function handleError(err){
     console.log(err);
 }
 
-var mediaOptions = {
-    video: true,
-    audio: true
-}
 
 // L'objet RTCPeerConnection a besoin des ICE servers (nous expliquerons ca) par la suite.
+// Ces serveurs sont mis à disposition par Google et Mozilla en libre service
 var servers = {
   'iceServer': [
     {'urls': 'stun:stun.services.mozilla.com'},
@@ -29,10 +34,10 @@ var servers = {
   ]
 }
 
-// On crée les objets RTCPeerConnection qui vont communiquer entre eux.
+// On crée l'instance RTCPeerConnection qui va communiquer avec les autres.
 var rtcPeer = new RTCPeerConnection(servers);
 
-var userId;
+
 
 /** On crée un data channel pour le pair local.
  * Puis on définit les méthodes permettant de gérer les evenements
@@ -42,6 +47,7 @@ var userId;
 sendChannel = rtcPeer.createDataChannel('sendChannel');
 sendChannel.onopen = handleSendChannelStatusChange;
 sendChannel.onclose = handleSendChannelStatusChange;
+
 
 /**
  * Methode permettant de gerer les evenements d'ouverture et fermeture du
@@ -62,8 +68,9 @@ function handleSendChannelStatusChange(event) {
     }
 }
 
+
 /**
- * Cette méthode permet d'ajouter le nouveau candidat ICE a notre instance
+ * Cette fonction permet d'ajouter le nouveau candidat ICE a notre instance
  * RTCPeerConnection avec la description qui décrit l'état de l'instance distante.
  */
 function onIceCandidate(pc, event){
@@ -76,6 +83,7 @@ function onIceCandidate(pc, event){
 
 }
 
+
 /**
  * La propriété onicecandidate permet de gérer l'évenement icecandidate qui a lieu
  * lorsque l'agent local ICE a besoin de delivrer un message a l'autre instance a travers
@@ -85,6 +93,7 @@ function onIceCandidate(pc, event){
 rtcPeer.onicecandidate = function (e) {
   onIceCandidate(rtcPeer, e);
 }
+
 
 /**
  * La propriete onaddstream permet de gerer l'evenenement addstream de type
@@ -100,6 +109,7 @@ rtcPeer.ontrack = function (e){
   remoteVideo.srcObject = e.streams[0];
 }
 
+
 /**
  * La propriété 'ondatachannel' permet de gérer l'événement 'datachanne' qui a lieu
  * lorsque un RTCDataChannel est ajouté par le pair distant avec la méthode
@@ -112,12 +122,14 @@ rtcPeer.ondatachannel = function (event) {
   rChannel.onclose = handleReceiveChannelStatusChange;
 }
 
+
 /**
  * Methode permettant d'ajouter le message recu depuis le canal de transmission.
  */
 function handleReceiveMessage(event) {
   remoteCodeMirror.setValue(event.data);
 }
+
 
 /**
 * Methode permettant de gerer les evenements d'ouverture et fermeture du
@@ -142,11 +154,18 @@ function sendMessage() {
 }
 
 
-
 // On récupère les flux video et audio local
+var mediaOptions = {
+    video: true,
+    audio: true
+}
 localStream = navigator.mediaDevices.getUserMedia(mediaOptions)
     .then(shareStream)
     .catch(handleError)
+
+
+// --------------------------- METHODES POUR LA NEGOTIATION DE L'OFFRE ET LA REPONSE
+
 
 /**
  * Méthode permettant d'envoyer l'offre au pair distant.
@@ -191,6 +210,9 @@ function receivedAnswer(answer, fromUserId) {
 }
 
 
+// --------------------------- GESTION DES EVENEMENTS DE LA DOM
+
+
 myCodeMirror.on('change', function () {
   sendMessage();
 });
@@ -224,19 +246,27 @@ document.getElementById("call").onclick = function () {
         .catch(handleError)
 }
 
+
+// --------------------------- GESTION DES EVENEMENTS WEBSOCKETS (socket.io)
+
+
 socket.on("welcome", (data) => {
   console.log(data);
   document.getElementById('myId').innerText = data;
 })
 
+
 socket.on("offer", ({offer, from}) => {
   receivedOffer(offer, from)
 })
+
 
 socket.on("candidate", ({candidate, from}) => {
     rtcPeer.addIceCandidate(candidate)
     console.log("Added received candidate")
 })
+
+
 socket.on("answer",  ({answer, from}) => {
     receivedAnswer(answer, from)
 })

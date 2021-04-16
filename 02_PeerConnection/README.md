@@ -78,10 +78,10 @@ function sendAnswerToLocalPc(answer) {
      offerToReceiveAudio: 1,
      offerToReceiveVideo: 1
  };
-localPc.createOffer(offerOptions)
+rtcPeerObject.createOffer(offerOptions)
     .then((desc) => {
         console.log("Description de la session lors de la création de l'offre : ", desc);
-        localPc.setLocalDescription(desc);
+        rtcPeerObject.setLocalDescription(desc);
         sendOfferToRemotePc(desc);
 
         })
@@ -96,17 +96,17 @@ localPc.createOffer(offerOptions)
 /**
  * Méthode permettant de recevoir l'offre du pair appelant.
  */
-function receivedOfferFromLocalPc(offer) {
+function receivedOffer(offer) {
   // Utilisation de la description reçue
-  remotePc.setRemoteDescription(offer);
+  rtcPeerObject.setRemoteDescription(offer);
   /**
    * Suite à cela le pair appelé doit creer une réponse et renvoyer également
    * sa description.
    */
-  remotePc.createAnswer()
+  rtcPeerObject.createAnswer()
       .then((desc) => {
           // Utilisation de sa propre description
-          remotePc.setLocalDescription(desc);
+          rtcPeerObject.setLocalDescription(desc);
           // Envoie de la réponse au pair appelant
           sendAnswerToLocalPc(desc);
 
@@ -120,8 +120,8 @@ function receivedOfferFromLocalPc(offer) {
 /**
  * Méthode permettant de recevoir la réponse du pair distant.
  */
-function receivedAnswerFromRemotePc(answer) {
-    localPc.setRemoteDescription(answer);
+function receivedAnswer(answer) {
+    rtcPeerObject.setRemoteDescription(answer);
 }
 ```
 

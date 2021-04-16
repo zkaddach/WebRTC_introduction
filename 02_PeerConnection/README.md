@@ -7,7 +7,14 @@ Pour cela WebRTC met à notre dispostion l'objet *RTCPeerConnection* que nous al
 Une instance RTCPeerConnection a besoin des serveurs STUN et TURN en paramètre. Nous verrons ce que sont ces serveurs ICE plus tard pour le moment on définit un objet null.
 
 ```js
-var servers = null;
+// L'objet RTCPeerConnection a besoin des STUN/TURN servers.
+var servers = {
+  'iceServer': [
+    {'urls': 'stun:stun.services.mozilla.com'},
+    {'urls': 'stun:stun.l.google.com:19302'},
+    {'urls': 'stun:stun2.l.google.com:19302'}
+  ]
+}
 var rtcPeerObject = RTCPeerConnection(servers);
  ```
 

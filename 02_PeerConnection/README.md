@@ -82,7 +82,7 @@ rtcPeerObject.createOffer(offerOptions)
     .then((desc) => {
         console.log("Description de la session lors de la création de l'offre : ", desc);
         rtcPeerObject.setLocalDescription(desc);
-        sendOfferToRemotePc(desc);
+        sendOffer(desc);
 
         })
     .catch(handleError)
@@ -108,7 +108,7 @@ function receivedOffer(offer) {
           // Utilisation de sa propre description
           rtcPeerObject.setLocalDescription(desc);
           // Envoie de la réponse au pair appelant
-          sendAnswerToLocalPc(desc);
+          sendAnswer(desc);
 
       })
 }
